@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คลังแห่งความรู้ IoT & MEA</title>
+<meta name="description" content="เว็บไซต์สรุปอุปกรณ์ IoT/อิเล็กทรอนิกส์ การเดินสายไฟบ้าน บอร์ด Arduino และ Arduino IDE — สั้น กระชับ เข้าใจง่าย">
+<style>
+  :root{
+    --bg:#0b0b0b; --fg:#f5f5f5; --muted:#bdbdbd; --card:#151515; --accent:#ffffff; --line:#2a2a2a;
+    --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.35); --focus:0 0 0 3px rgba(255,255,255,.25);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,"Noto Sans Thai",sans-serif}
+  a{color:var(--fg);text-decoration:none;border-bottom:1px dotted var(--muted)}
+  a:hover{border-bottom-color:var(--fg)}
+  header{position:sticky;top:0;z-index:1000;background:rgba(11,11,11,.8);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+  .nav{max-width:1200px;margin:auto;display:flex;gap:.8rem;align-items:center;padding:.8rem 1rem}
+  .brand{font-weight:800;letter-spacing:.5px}
+  .tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-left:auto}
+  .tab{padding:.55rem .9rem;border:1px solid var(--line);border-radius:999px;cursor:pointer;user-select:none;transition:.2s}
+  .tab:hover{transform:translateY(-1px)}
+  .tab.active{background:var(--fg);color:#000;border-color:var(--fg)}
+  main{max-width:1200px;margin:20px auto;padding:0 1rem}
+  .hero{display:grid;gap:1rem;grid-template-columns:1.2fr .8fr;align-items:center;margin:10px 0 18px}
+  .hero .card{padding:1.1rem 1.2rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  h1{font-size:clamp(24px,3.2vw,34px);margin:.2rem 0 0}
+  h2{font-size:clamp(18px,2.4vw,24px);margin:1.2rem 0 .6rem}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+  .item{padding:14px;border:1px solid var(--line);border-radius:12px;background:#101010;transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease}
+  .item:hover{transform:translateY(-4px);border-color:#3a3a3a;box-shadow:0 10px 26px rgba(0,0,0,.45)}
+  .item b{display:block;margin-bottom:6px;font-weight:700}
+  .controls{display:flex;gap:.6rem;flex-wrap:wrap;margin:14px 0}
+  .input{flex:1;min-width:210px;background:#0e0e0e;border:1px solid var(--line);border-radius:999px;padding:.7rem 1rem;color:var(--fg);outline:none}
+  .input:focus{box-shadow:var(--focus)}
+  .pill{border:1px solid var(--line);padding:.5rem .8rem;border-radius:999px;cursor:pointer}
+  .section{display:none}
+  .section.active{display:block}
+  .note{padding:12px;border:1px dashed #3a3a3a;border-radius:10px;background:#0f0f0f}
+  footer{margin:36px 0 60px;border-top:1px solid var(--line);padding-top:16px}
+  .srcs{display:grid;gap:6px}
+  .kbd{font-family:ui-monospace,Menlo,monospace;background:#0e0e0e;border:1px solid var(--line);padding:.1rem .45rem;border-radius:6px}
+  @media (max-width:900px){.hero{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav" aria-label="ตัวนำทาง">
+    <div class="brand" aria-label="ชื่อเว็บไซต์">คลังแห่งความรู้ IoT & MEA</div>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-target="iot" role="tab" aria-selected="true">อุปกรณ์ IoT / เซนเซอร์</button>
+      <button class="tab" data-target="components" role="tab">ชิ้นส่วนวงจร</button>
+      <button class="tab" data-target="wiring" role="tab">การเดินสายไฟบ้าน</button>
+      <button class="tab" data-target="arduino" role="tab">บอร์ด Arduino</button>
+      <button class="tab" data-target="ide" role="tab">Arduino IDE</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="card">
+      <h1>สรุปสั้น เข้าใจง่าย ใช้งานจริงได้</h1>
+      <p class="muted">ทุกหัวข้ออธิบายกระชับ ~2 บรรทัดต่ออุปกรณ์ ภาษาไทยแบบคนพิมพ์ อ่านลื่น มีค้นหาและจัดหมวด</p>
+      <div class="controls" role="search">
+        <input id="search" class="input" placeholder="ค้นหา: เช่น ESP32, รีเลย์, THW, คีมปอกสาย..." aria-label="ค้นหา">
+        <button id="clear" class="pill" aria-label="ล้างคำค้น">ล้างคำค้น</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>ทิปใช้งาน</h2>
+      <ul class="muted" style="margin:.4rem 0 0;padding-left:1rem">
+        <li>คลิกแท็บด้านบนเพื่อสลับหมวด</li>
+        <li>กด <span class="kbd">/</span> เพื่อโฟกัสช่องค้นหา</li>
+        <li>โฮเวอร์การ์ดเพื่อดูแอนิเมชัน & ตรวจสอบว่าคลิกง่าย</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- IoT / Sensors -->
+  <section id="iot" class="section active" aria-labelledby="tab-iot">
+    <h2>อุปกรณ์ IoT / เซนเซอร์ / แอคชูเอเตอร์</h2>
+    <div class="grid" id="grid-iot">
+      <!-- IoT core -->
+      <div class="item" data-tags="esp8266 wifi iot">
+        <b>ESP8266</b>
+        โมดูล Wi-Fi ราคาเป็นมิตร เหมาะเริ่มทำ IoT เบื้องต้นและงานสั่งงานผ่านเน็ต<br>
+        มี GPIO พอสำหรับโปรเจ็กต์เล็ก ๆ ใช้กับ Arduino Core ได้สะดวก
+      </div>
+      <div class="item" data-tags="esp32 wifi bt iot">
+        <b>ESP32</b>
+        MCU Wi-Fi + Bluetooth แรงกว่า ESP8266 เหมาะงานหลายงานพร้อมกัน<br>
+        มี ADC/DAC/Touch/PIO เยอะ ทำ IoT, เซนเซอร์, เสียง ได้ครบ
+      </div>
+      <div class="item" data-tags="pico w wifi iot raspberry">
+        <b>Raspberry Pi Pico W</b>
+        ชิป RP2040 + Wi-Fi เหมาะทำงาน IoT ที่ต้องการ I/O เยอะและต้นทุนต่ำ<br>
+        เขียนได้ทั้ง MicroPython/Arduino C++ ประหยัดไฟ ใช้งานยืดหยุ่น
+      </div>
+      <div class="item" data-tags="arduino mkr wifi 1010 iot">
+        <b>Arduino MKR WiFi 1010</b>
+        บอร์ด Arduino ขนาดเล็กมี Wi-Fi/BLE ในตัว เหมาะงานเชื่อมคลาวด์<br>
+        มีวงจรชาร์จ Li-Po บนบอร์ด ออกแบบเพื่อ IoT โดยเฉพาะ
+      </div>
+      <div class="item" data-tags="nano 33 iot">
+        <b>Arduino Nano 33 IoT</b>
+        Nano รุ่น IoT มี Wi-Fi/BLE บอร์ดจิ๋วแต่ครบเครื่อง ใช้งานสะดวกในพื้นที่จำกัด<br>
+        เหมาะโซลูชันสวมใส่/เซนเซอร์กระจายหลายจุด
+      </div>
+      <!-- Sensors -->
+      <div class="item" data-tags="sensor temp humidity dht22">
+        <b>DHT22 / AM2302</b>
+        เซนเซอร์อุณหภูมิ/ความชื้น ดิจิทัล ใช้งานง่าย ราคาคุ้มค่า<br>
+        ความไวปานกลาง เหมาะงานในอาคาร ไม่ทนสภาพกลางแจ้งจัด
+      </div>
+      <div class="item" data-tags="sensor temp bme280 pressure">
+        <b>BME280</b>
+        วัดอุณหภูมิ ความชื้น และความดันอากาศ ในตัวเดียว ความแม่นยำดี<br>
+        ต่อ I²C/SPI ได้ เหมาะสถานีอากาศขนาดจิ๋ว
+      </div>
+      <div class="item" data-tags="sensor light bh1750 lux">
+        <b>BH1750</b>
+        เซนเซอร์วัดแสงหน่วยลักซ์ ต่อ I²C ค่าเสถียร อ่านตรงไปตรงมา<br>
+        ใช้ควบคุมไฟอัตโนมัติ/บันทึกสภาพแสง
+      </div>
+      <div class="item" data-tags="sensor motion pir">
+        <b>PIR Motion</b>
+        ตรวจจับการเคลื่อนไหวของคน/สัตว์ด้วยอินฟราเรดแบบพาสซีฟ<br>
+        กินไฟน้อย เหมาะสัญญาณกันขโมย/เปิดไฟอัตโนมัติ
+      </div>
+      <div class="item" data-tags="sensor gas mq-2">
+        <b>MQ-2</b>
+        เซนเซอร์ก๊าซไวต่อควัน/ก๊าซหุงต้ม ราคาถูก ใช้งานกว้างขวาง<br>
+        ต้องคาลิเบรตและวางในที่อากาศถ่ายเทจึงอ่านสเถียร
+      </div>
+      <!-- Actuators -->
+      <div class="item" data-tags="actuator relay">
+        <b>รีเลย์โมดูล</b>
+        สวิตช์ไฟฟ้าควบคุมด้วยสัญญาณ เหมาะแยกวงจรโหลดกับไมโครคอนโทรลเลอร์<br>
+        เลือกแรงดัน/กระแสให้พอ และคำนึงถึงออปโต/ไดโอดกลับขั้ว
+      </div>
+      <div class="item" data-tags="actuator ssr solid state relay">
+        <b>Solid State Relay (SSR)</b>
+        สวิตช์อิเล็กทรอนิกส์ไร้หน้าสัมผัส เงียบ สึกหรอน้อย<br>
+        ร้อนกว่าริเลย์กลไก ควรติดฮีตซิงและใช้ตามพิกัด
+      </div>
+      <div class="item" data-tags="motor dc pwm">
+        <b>มอเตอร์ DC + ไดรเวอร์</b>
+        ขับง่ายด้วย PWM ควบคุมความเร็ว-ทิศทางด้วย H-Bridge (เช่น L298N)<br>
+        ใส่ไดโอดกันกลับและเลือกแหล่งจ่ายแยกจากลอจิก
+      </div>
+      <div class="item" data-tags="servo">
+        <b>เซอร์โว (PWM)</b>
+        หมุนตามสัญญาณ PWM เป็นองศา เหมาะหุ่นยนต์/กลไกเล็ก<br>
+        ต้องแหล่งจ่ายนิ่ง กระแสพอ ไม่ดึงจากพอร์ต 5V บอร์ดโดยตรง
+      </div>
+      <div class="item" data-tags="stepper">
+        <b>สเต็ปเปอร์</b>
+        หมุนเป็นสเต็ปละเอียด เหมาะงานที่ต้องตำแหน่งแม่น เช่น CNC/ปริ้น 3D<br>
+        ใช้ไดรเวอร์เฉพาะ (A4988/TMC) และจัดการความร้อนให้ดี
+      </div>
+    </div>
+  </section>
+
+  <!-- Components -->
+  <section id="components" class="section">
+    <h2>ชิ้นส่วนวงจร (พื้นฐานถึงใช้งานจริง)</h2>
+    <div class="grid" id="grid-components">
+      <div class="item" data-tags="resistor ตัวต้านทาน">
+        <b>ตัวต้านทาน</b>
+        จำกัดกระแส/แบ่งแรงดัน เลือกค่าด้วยรหัสสีและกำลังวัตต์ให้พอ<br>
+        ใช้ร่วมกับ LED/ไอซีเพื่อปกป้องวงจรไม่ให้เกินพิกัด
+      </div>
+      <div class="item" data-tags="capacitor ตัวเก็บประจุ">
+        <b>ตัวเก็บประจุ</b>
+        กรองสัญญาณ/คัปปลิง/จ่ายฉับพลัน มีหลายชนิด (อิเล็กโทรไลต์/เซรามิก/ฟิล์ม)<br>
+        ระวังขั้วกับแรงดันทน โดยเฉพาะอิเล็กโทรไลต์
+      </div>
+      <div class="item" data-tags="inductor ตัวเหนี่ยวนำ">
+        <b>ตัวเหนี่ยวนำ</b>
+        เก็บพลังงานในสนามแม่เหล็ก ใช้กรอง/สวิตชิ่งเพาเวอร์ซัพพลาย<br>
+        ค่าอิมพีแดนซ์ขึ้นกับความถี่ เลือกกระแสอิ่มตัวให้พอ
+      </div>
+      <div class="item" data-tags="diode ไดโอด">
+        <b>ไดโอด</b>
+        ป้องกันกระแสย้อน/ทำเรกติไฟเออร์ ใส่กับคอยล์เพื่อกันแรงดันย้อน<br>
+        มีชนิดช็อตกี้/ซีเนอร์ เลือกตามงานความถี่-แรงดัน
+      </div>
+      <div class="item" data-tags="transistor bjt">
+        <b>ทรานซิสเตอร์ (BJT)</b>
+        ขยาย/สวิตช์สัญญาณ เลือกตาม hFE และพิกัด I/V/กำลังสูญเสีย<br>
+        ต้องใช้ไบอัสและรีซิสเตอร์ที่เหมาะสมเพื่อสวิตช์อิ่มตัว
+      </div>
+      <div class="item" data-tags="mosfet">
+        <b>MOSFET</b>
+        สวิตช์ประสิทธิภาพสูง ควบคุมด้วยแรงดันเกต Rds(on) ต่ำช่วยลดความร้อน<br>
+        เลือกแบบลอจิกเลเวลเมื่อขับด้วย 3.3/5V จากไมโครคอนโทรลเลอร์
+      </div>
+      <div class="item" data-tags="ic ไมโครคอนโทรลเลอร์">
+        <b>IC / ไมโครคอนโทรลเลอร์</b>
+        หัวใจของงานดิจิทัล เลือกตามคอร์, ความถี่, RAM/Flash และ I/O<br>
+        คิดเรื่องแรงดันเลี้ยง, เพาเวอร์, และเครื่องมือพัฒนาให้พร้อม
+      </div>
+      <div class="item" data-tags="powersupply แหล่งจ่าย buck boost">
+        <b>แหล่งจ่ายไฟ (Buck/Boost)</b>
+        แปลงแรงดันให้เสถียร เลือกกระแสสำรองเผื่อ 20–30%<br>
+        ใส่คาปาซิเตอร์ใกล้โหลดและออกแบบกราวด์ให้สะอาด
+      </div>
+      <div class="item" data-tags="connector terminal block dupont">
+        <b>คอนเน็กเตอร์/เทอร์มินัล</b>
+        จุดต่อสาย/บัส เลือกตามกระแสและการยึด เช่น สกรู/สปริง/ดูรองท์<br>
+        สำหรับงานสั่นสะเทือน ใช้หัวเข้าคลิปล็อกหรือเทอร์มินัลบล็อก
+      </div>
+      <div class="item" data-tags="tools คีม คีมปอก คีมย้ำ บัดกรี multimeter">
+        <b>เครื่องมือช่าง (พื้นฐาน)</b>
+        คีมตัด/ปอก/ย้ำสาย, หัวแร้งบัดกรี, มัลติมิเตอร์ — ของจำเป็นทุกโต๊ะ<br>
+        สำหรับงานไฟฟ้าเลือกคีมมีฉนวนมาตรฐาน VDE/IEC60900 เพื่อความปลอดภัย
+      </div>
+    </div>
+  </section>
+
+  <!-- Household wiring -->
+  <section id="wiring" class="section">
+    <h2>การเดินสายไฟบ้าน (สรุปย่อ + ความปลอดภัยมาก่อน)</h2>
+    <div class="note">
+      ⚠️ <b>คำเตือน:</b> งานไฟฟ้าควรทำโดยผู้มีใบอนุญาตหรืออยู่ในการกำกับของช่างไฟฟ้าที่มีความรู้
+      ปฏิบัติตามมาตรฐานการติดตั้งไฟฟ้าประเทศไทย/MEA และตัดไฟก่อนทำงานเสมอ. อ้างอิงแนวทางจากเอกสารของ MEA. 
+    </div>
+    <div class="grid">
+      <div class="item" data-tags="สายไฟ vaf n yy thw ประเภทสาย">
+        <b>ชนิดสายไฟที่พบบ่อย (บ้าน)</b>
+        <u>VAF/VAF-G</u> เดินลอยในบ้าน แรงดัน 300/500V ห้ามร้อยท่อ/ฝังดิน; 
+        <u>NYY/NYY-G</u> เดินภายนอก/ฝังดินได้; <u>THW</u> ใช้เมื่อร้อยท่อ 
+        เลือกขนาดหน้าตัดตามกระแสและระยะทาง
+      </div>
+      <div class="item" data-tags="สีสาย สีมาตรฐาน เฟส นิวตรอน กราวด์">
+        <b>สีสาย (แนวทางทั่วไป)</b>
+        โดยแพร่หลาย: <u>สายนิวตรอน</u> มักใช้ <i>ฟ้า</i>, <u>สายดิน</u> <i>เขียว/เหลือง</i>, 
+        <u>สายไฟเฟส</u> สีน้ำตาล/ดำ/เทา (ขึ้นกับระบบ/มาตรฐาน). ตรวจสอบมาตรฐานหน้างานเสมอ
+      </div>
+      <div class="item" data-tags="อุปกรณ์ป้องกัน mcb rcd เบรกเกอร์">
+        <b>อุปกรณ์ป้องกัน</b>
+        ใช้ MCB แยกวงจร และ <u>RCD/RCBO</u> ป้องกันไฟดูด เลือกพิกัดตามโหลดและกราวด์ถูกต้อง<br>
+        ติดตั้งตู้เมน/สายดิน/หลักดินตามมาตรฐานการติดตั้ง
+      </div>
+      <div class="item" data-tags="แนวทางเดินสาย ท่อ รัดสาย">
+        <b>แนวทางเดินสาย</b>
+        เดินในท่อ/รางให้เรียบร้อย หลีกเลี่ยงโค้งหักงอเกินจำเป็น และแยกสายแรงดันกับสัญญาณ<br>
+        ยึดระยะคลิป/เข็มขัดรัดสายสม่ำเสมอ มีเสตนซิลระบุวงจรที่ตู้
+      </div>
+      <div class="item" data-tags="คีม ประเภทคีม คีมตัด คีมปอก คีมย้ำ">
+        <b>คีมที่ควรมี</b>
+        คีมตัด (ทั่วไป/ฉนวน/VDE), คีมปอกสายปรับขนาด, คีมย้ำหางปลา/หัวคอนแทค<br>
+        เลือกชนิดให้ตรงงานและใช้ของมีฉนวนสำหรับงานไฟฟ้าเสมอ
+      </div>
+      <div class="item" data-tags="ปลั๊ก เต้ารับ สวิตช์ มาตรฐาน">
+        <b>เต้ารับ/สวิตช์</b>
+        เลือกมาตรฐาน มอก. ติดตั้งกล่องพักและต่อสายให้แน่น ใช้หางปลาย้ำเมื่อจำเป็น<br>
+        ตรวจสอบทิศ L-N-E ให้ถูกต้องก่อนจ่ายไฟ
+      </div>
+    </div>
+  </section>
+
+  <!-- Arduino boards -->
+  <section id="arduino" class="section">
+    <h2>บอร์ด Arduino (หลัก ๆ ที่ใช้กัน)</h2>
+    <div class="grid" id="grid-arduino">
+      <div class="item" data-tags="arduino uno r3 classic">
+        <b>Uno R3</b>
+        บอร์ดคลาสสิก ATmega328P เหมาะเริ่มต้น ชุมชนใหญ่ ไลบรารีเยอะ<br>
+        พอร์ต/หน่วยความจำจำกัด เหมาะโปรเจ็กต์พื้นฐาน
+      </div>
+      <div class="item" data-tags="arduino uno r4 minerva renesas">
+        <b>Uno R4 (Minima/WiFi)</b>
+        MCU 32-บิต เร็วและ RAM/Flash มากกว่า R3; รุ่น WiFi มี Wi-Fi/BLE ในตัว<br>
+        ไลบรารีส่วนใหญ่รองรับ ย้ายโปรเจ็กต์จาก R3 ได้ไม่ยาก
+      </div>
+      <div class="item" data-tags="mega 2560">
+        <b>Mega 2560</b>
+        I/O เยอะ เหมาะโปรเจ็กต์ต้องใช้พินจำนวนมาก เช่น CNC/3D Printer<br>
+        ช้ากว่า 32-บิต แต่เสถียรและหาของง่าย
+      </div>
+      <div class="item" data-tags="nano every">
+        <b>Nano / Nano Every</b>
+        ขนาดจิ๋ว เสียบเบรดบอร์ดได้ เหมาะต้นแบบพื้นที่จำกัด<br>
+        รุ่น Every อัปเกรดสเปกและความเข้ากันได้ที่ดีขึ้น
+      </div>
+      <div class="item" data-tags="nano 33 ble sense imu mic">
+        <b>Nano 33 BLE / Sense</b>
+        มี BLE และรุ่น Sense มี IMU/ไมค์ เหมาะงาน ML ขอบสนาม (TinyML)<br>
+        ใช้ 3.3V ระวังต่อวงจรร่วมกับ 5V
+      </div>
+      <div class="item" data-tags="due arm">
+        <b>Due</b>
+        32-บิต ARM ประสิทธิภาพสูง เหมาะงานต้องการความเร็ว/พอร์ตมาก<br>
+        ใช้ลอจิก 3.3V ระวังการต่อร่วมกับอุปกรณ์ 5V
+      </div>
+      <div class="item" data-tags="leonardo micro hid">
+        <b>Leonardo / Micro</b>
+        รองรับ HID เป็นคีย์บอร์ด/เมาส์ได้โดยตรง เหมาะงานอินพุตคัสตอม<br>
+        I/O ไม่มาก แต่ลูกเล่นด้าน USB เด่น
+      </div>
+      <div class="item" data-tags="mkr zero wifi 1010">
+        <b>MKR Zero / MKR WiFi 1010</b>
+        บอร์ดตระกูล MKR สำหรับ IoT/เสียง/การ์ด SD; รุ่น WiFi มีเน็ตในตัว.<br>
+        ฟอร์มแฟกเตอร์เล็ก พกง่าย ใช้งานกับแบต Li-Po สบาย
+      </div>
+      <div class="item" data-tags="portenta h7 giga r1 nicla">
+        <b>Portenta H7 / GIGA R1 / Nicla</b>
+        ระดับโปรฯ: สองคอร์แรง, พอร์ตเยอะ, เซนเซอร์จิ๋วสำหรับงานอุตสาหกรรม/AIoT<br>
+        เหมาะงานจริงจัง งบสูงกว่าบอร์ดพื้นฐาน
+      </div>
+    </div>
+    <p class="muted" style="margin-top:8px">อ้างอิงรายการบอร์ดจากหน้ารวมฮาร์ดแวร์/สโตร์ Arduino (ดูแหล่งอ้างอิง)</p>
+  </section>
+
+  <!-- Arduino IDE -->
+  <section id="ide" class="section">
+    <h2>Arduino IDE (สรุปข้อดี/ข้อจำกัด)</h2>
+    <div class="grid">
+      <div class="item" data-tags="ide ข้อดี editor library manager serial plotter autocomplete">
+        <b>ข้อดี</b>
+        ติดตั้งง่าย ใช้ได้ทุกแพลตฟอร์ม มี Library/Board Manager, Serial Monitor/Plotter, Auto-format/Autocomplete<br>
+        ชุมชนใหญ่ เอกสารครบ เชื่อม Remote Sketchbook/Arduino Cloud ได้
+      </div>
+      <div class="item" data-tags="ide ข้อเสีย limitations">
+        <b>ข้อจำกัด</b>
+        การดีบักฮาร์ดแวร์ต้องตั้งค่า/อุปกรณ์เพิ่ม (เช่น J-Link/Atmel-ICE)<br>
+        ฟีเจอร์ขั้นสูง/รีแฟกเตอร์โค้ดสู้ IDE ใหญ่ ๆ ไม่ได้ในบางจุด
+      </div>
+      <div class="item" data-tags="ide เริ่มใช้งาน ติดตั้ง board manager upload">
+        <b>เริ่มใช้งานเร็ว</b>
+        ดาวน์โหลด IDE 2 → ติดตั้งบอร์ดจาก Board Manager → เปิดตัวอย่าง → Verify/Upload<br>
+        ถ้าใช้ Wi-Fi บางรุ่น อัปเดตเฟิร์มแวร์/อัปโหลดใบรับรอง SSL ตามคู่มือ
+      </div>
+    </div>
+    <p class="muted" style="margin-top:8px">รายละเอียดขั้นตอน/คู่มืออย่างเป็นทางการ ดูลิงก์ Arduino Docs ใน “แหล่งอ้างอิง”</p>
+  </section>
+
+  <footer>
+    <h2>แหล่งอ้างอิง</h2>
+    <div class="srcs">
+      <div>• Arduino Hardware overview — Arduino (เอกสารรวมฮาร์ดแวร์) — <a href="https://www.arduino.cc/en/hardware" target="_blank" rel="noopener">arduino.cc/en/hardware</a></div>
+      <div>• Arduino IDE Docs (IDE 2 และหัวข้อย่อย: ติดตั้งบอร์ด, อัปโหลด, Serial Monitor/Plotter, Debug ฯลฯ) — <a href="https://docs.arduino.cc/software/ide/" target="_blank" rel="noopener">docs.arduino.cc/software/ide/</a></div>
+      <div>• Arduino Documentation (หน้าโฮมรวม) — <a href="https://docs.arduino.cc/" target="_blank" rel="noopener">docs.arduino.cc</a></div>
+      <div>• มาตรฐานการติดตั้งทางไฟฟ้า (MEA — ไฟล์ PDF) — <a href="https://www.mea.or.th/api/v1/dcproCMS/filesDownload/file_h2qcz4cz.pdf/74a2c6e6-b68f-41e2-8a52-ad24218b7335" target="_blank" rel="noopener">MEA PDF</a></div>
+      <div>• หน้าบริการ/แนวทางของ MEA (อ้างอิงมาตรฐาน วสท.) — <a href="https://www.mea.or.th/our-services/mea-service/e-service/new-meter/to-use-electricity-voltage-not-exceeding-24-kv" target="_blank" rel="noopener">mea.or.th</a></div>
+      <div>• ความรู้เรื่องชนิดสายไฟที่นิยมในไทย (NYY/THW/VAF ฯลฯ) — <a href="https://www.bangkokcable.com/th/knowledge/electric-cable-type-26" target="_blank" rel="noopener">Bangkok Cable</a></div>
+      <div>• บทความอธิบายคีมตัด/ชนิดคีม (แนวทางเลือกเครื่องมือ) — <a href="https://toolwalks.com/%E0%B8%84%E0%B8%B5%E0%B8%A1-%E0%B8%84%E0%B8%B5%E0%B8%A1%E0%B8%A5%E0%B9%87%E0%B8%AD%E0%B8%84-%E0%B8%84%E0%B8%B5%E0%B8%A1%E0%B8%8A%E0%B8%99%E0%B8%B4%E0%B8%94%E0%B8%95%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%86/%E0%B9%80%E0%B8%88%E0%B8%B2%E0%B8%B0%E0%B8%A5%E0%B8%B6%E0%B8%81-%E0%B8%84%E0%B8%B5%E0%B8%A1%E0%B8%95%E0%B8%B1%E0%B8%94%E0%B8%AA%E0%B8%B2%E0%B8%A2%E0%B9%84%E0%B8%9F-%E0%B9%83%E0%B8%8A%E0%B9%89%E0%B8%95/" target="_blank" rel="noopener">Toolwalks</a></div>
+    </div>
+    <p style="margin-top:10px"><b>credit :</b> Limux (ณัฎชานนท์ จีบสุวรรณ)</p>
+  </footer>
+</main>
+
+<script>
+  // Simple SPA tabs
+  const tabs=[...document.querySelectorAll('.tab')];
+  const sections=[...document.querySelectorAll('.section')];
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('active')); t.classList.add('active');
+    sections.forEach(s=>s.classList.remove('active'));
+    const target=document.getElementById(t.dataset.target); target.classList.add('active');
+    document.getElementById('search').value=''; filterItems('');
+  }));
+
+  // Search filter
+  const search=document.getElementById('search');
+  const clear=document.getElementById('clear');
+  const allItems=[...document.querySelectorAll('.item')];
+  function filterItems(q){
+    const s=q.trim().toLowerCase();
+    allItems.forEach(it=>{
+      const hit = it.innerText.toLowerCase().includes(s) || (it.dataset.tags||"").includes(s);
+      it.style.display = hit ? '' : 'none';
+    });
+  }
+  search.addEventListener('input',e=>filterItems(e.target.value));
+  clear.addEventListener('click',()=>{search.value=''; filterItems(''); search.focus();});
+  window.addEventListener('keydown',e=>{ if(e.key==='/'){ e.preventDefault(); search.focus(); }});
+</script>
+</body>
+</html>
