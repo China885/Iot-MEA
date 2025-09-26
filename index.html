@@ -77,8 +77,6 @@
       </ul>
     </div>
   </section>
-
-  <!-- IoT / Sensors -->
   <section id="iot" class="section active" aria-labelledby="tab-iot">
     <h2>อุปกรณ์ IoT / เซนเซอร์ / แอคชูเอเตอร์</h2>
     <div class="grid" id="grid-iot">
@@ -108,7 +106,6 @@
         Nano รุ่น IoT มี Wi-Fi/BLE บอร์ดจิ๋วแต่ครบเครื่อง ใช้งานสะดวกในพื้นที่จำกัด<br>
         เหมาะโซลูชันสวมใส่/เซนเซอร์กระจายหลายจุด
       </div>
-      <!-- Sensors -->
       <div class="item" data-tags="sensor temp humidity dht22">
         <b>DHT22 / AM2302</b>
         เซนเซอร์อุณหภูมิ/ความชื้น ดิจิทัล ใช้งานง่าย ราคาคุ้มค่า<br>
@@ -134,7 +131,6 @@
         เซนเซอร์ก๊าซไวต่อควัน/ก๊าซหุงต้ม ราคาถูก ใช้งานกว้างขวาง<br>
         ต้องคาลิเบรตและวางในที่อากาศถ่ายเทจึงอ่านสเถียร
       </div>
-      <!-- Actuators -->
       <div class="item" data-tags="actuator relay">
         <b>รีเลย์โมดูล</b>
         สวิตช์ไฟฟ้าควบคุมด้วยสัญญาณ เหมาะแยกวงจรโหลดกับไมโครคอนโทรลเลอร์<br>
@@ -162,8 +158,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Components -->
   <section id="components" class="section">
     <h2>ชิ้นส่วนวงจร (พื้นฐานถึงใช้งานจริง)</h2>
     <div class="grid" id="grid-components">
@@ -219,8 +213,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Household wiring -->
   <section id="wiring" class="section">
     <h2>การเดินสายไฟบ้าน (สรุปย่อ + ความปลอดภัยมาก่อน)</h2>
     <div class="note">
@@ -261,8 +253,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Arduino boards -->
   <section id="arduino" class="section">
     <h2>บอร์ด Arduino (หลัก ๆ ที่ใช้กัน)</h2>
     <div class="grid" id="grid-arduino">
@@ -314,8 +304,6 @@
     </div>
     <p class="muted" style="margin-top:8px">อ้างอิงรายการบอร์ดจากหน้ารวมฮาร์ดแวร์/สโตร์ Arduino (ดูแหล่งอ้างอิง)</p>
   </section>
-
-  <!-- Arduino IDE -->
   <section id="ide" class="section">
     <h2>Arduino IDE (สรุปข้อดี/ข้อจำกัด)</h2>
     <div class="grid">
@@ -354,7 +342,6 @@
 </main>
 
 <script>
-  // Simple SPA tabs
   const tabs=[...document.querySelectorAll('.tab')];
   const sections=[...document.querySelectorAll('.section')];
   tabs.forEach(t=>t.addEventListener('click',()=>{
@@ -364,7 +351,6 @@
     document.getElementById('search').value=''; filterItems('');
   }));
 
-  // Search filter
   const search=document.getElementById('search');
   const clear=document.getElementById('clear');
   const allItems=[...document.querySelectorAll('.item')];
